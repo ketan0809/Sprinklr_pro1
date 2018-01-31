@@ -1,0 +1,207 @@
+body{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    margin: 0px;
+    min-width: 1000px;
+    overflow: auto;
+    padding: 0px;
+    width: 100%;
+}
+
+.header{
+    background-color: black;
+    display: flex;
+    height: 50px;
+    justify-content: space-between;
+    padding: 5px 120px;
+    position: sticky;
+    top: 0px;
+    text-align: center;
+    z-index: 10;
+}
+
+.header-list{
+    align-items: center;
+    color: #ffffff;
+    display: flex;
+    font-size: 20px;
+
+}
+
+.header-list > a{
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.header-img{
+    display: flex;
+    color: white;
+    width: 100%;
+}
+
+.text{
+    position: absolute;
+    top: 190px;
+    left: 565px;
+    margin: auto;
+}
+
+.img-text{
+    text-align: center;
+    font-size: 60px;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    margin: 8px 2px 0px 2px;
+    padding: 2px;
+    width: calc(100% - 4px);
+    height: 1500px;
+}
+
+.display-item{
+    display: flex;
+    flex-wrap: wrap;
+    height: 300px;
+    overflow: auto;
+}
+
+.items{
+    display: flex;
+    margin: 10px;
+    width: 218px;
+    height: 100px;
+    background-color: #dbdbdb;
+    box-shadow:0 4px 10px 0 rgba(0,0,0,0.2);
+}
+
+.items-img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    margin: auto 5px;
+}
+
+.items-quantity{
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    margin: auto;
+    font-size: 20px;
+}
+
+.orderlist{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /*border: 1px solid black;*/
+    height: 1200px;
+    padding: 5px;
+}
+
+#pendingorder{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 550px;
+    width: 100%;
+}
+
+.pending-header{
+    width: 200px;
+    height: 60px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+
+}
+.pending-list{
+    padding: 5px;
+    height: calc(100% - 12px);
+    width: calc(100% - 10px);
+    display: flex;
+    flex-direction: column;
+}
+
+.pending-order{
+    display: flex;
+    height: 100px;
+    flex-direction: row;
+    box-shadow:0 4px 10px 0 rgba(0,0,0,0.2);
+}
+
+.person-img{
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.person-detail{
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+}
+
+.order-details{
+    width: 650px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    flex-direction: column;
+}
+
+.status-btn{
+    margin: auto;
+    width: 150px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #5bc0de;
+    font-size: 20px;
+    border-radius: 5px;
+    color: #ffffff;
+}
+
+.delete-btn{
+    margin: auto;
+    width: 50px;
+    display: flex;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #d02139;
+    border-radius: 50%;
+    font-size: 20px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+#completedOrder{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 550px;
+    width: 100%;
+}
+
+.approve{
+    background-color: #5cb85c;
+}
