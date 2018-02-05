@@ -114,7 +114,7 @@ body{
     width: 100%;
 }
 
-.pending-header{
+.order-type{
     width: 200px;
     height: 60px;
     margin: auto;
@@ -124,7 +124,7 @@ body{
     font-size: 25px;
 
 }
-.pending-list{
+.order-list{
     padding: 5px;
     height: calc(100% - 12px);
     width: calc(100% - 10px);
@@ -132,7 +132,7 @@ body{
     flex-direction: column;
 }
 
-.pending-order{
+.order-info{
     display: flex;
     height: 100px;
     flex-direction: row;
@@ -176,6 +176,7 @@ body{
     font-size: 20px;
     border-radius: 5px;
     color: #ffffff;
+    cursor: pointer;
 }
 
 .delete-btn{

@@ -50,7 +50,6 @@ let model= {
 let octopus = {
 
     init:function(){
-
        for(let order in model.myLocalStorage) {
            if (!model.myLocalStorage.hasOwnProperty(order)) {
                continue;
@@ -58,10 +57,15 @@ let octopus = {
            if(isNaN(Number(order))==true && order!='orderNumber'){
                let getData = JSON.parse(model.myLocalStorage[order]);
                view.init(getData);
-               viewPending.init(order);
+               if(getData.status == 'pending') {
+                   viewPending.init(order);
+               }else if(getData.status == 'approve'){
+                   console.log(order);
+                   viewCompleted.init(order);
+
+               }
            }
        }
-
     },
 
     getItems:function(){
@@ -72,13 +76,55 @@ let octopus = {
         return model.myLocalStorage;
     },
 
-    deleteItem:function(event){
-        if(event.target.className != 'delete-btn'){
+    updateMakingItem:function(getData){
+
+        if(getData.status == 'pending') {
+            for (let item in getData) {
+                if (!getData.hasOwnProperty(item)) {
+                    continue;
+                };
+                if (item != 'time' && item != 'status') {
+                    model.items[item].quantity += getData[item];
+                }
+            }
+        }else if(getData.status == 'approve'){
+            for (let item in getData) {
+                if (!getData.hasOwnProperty(item)) {
+                    continue;
+                };
+                if (item != 'time' && item != 'status') {
+                    if(model.items[item].quantity  >= getData[item]){
+                        model.items[item].quantity  -= getData[item];
+                    }
+                }
+            }
+        }
+    },
+
+    updateOrder:function(event){
+        if(event.target.className == 'delete-btn'){
+            octopus.deleteOrder();
+        }else if(event.target.className == 'status-btn'){
+            octopus.statusUpdate();
+        }else{
             return ;
         }
-        let item = event.target.closest('.pending-order');
+    },
+
+    deleteOrder(){
+        let item = event.target.closest('.order-info');
         model.myLocalStorage.removeItem(item.id);
         viewPending.delete(item);
+    },
+
+    statusUpdate(){
+        let item = event.target.closest('.order-info');
+        let getOrderId = JSON.parse(model.myLocalStorage[item.id]);
+        getOrderId.status = 'approve';
+        model.myLocalStorage.setItem(item.id,JSON.stringify(getOrderId));
+        view.init(getOrderId);
+        viewPending.delete(item);
+        viewCompleted.init(item.id);
     }
 
 };
@@ -91,14 +137,7 @@ let view = {
 
      init:function(getData){
 
-         for(let item in getData){
-             if(!getData.hasOwnProperty(item)){
-                 continue;
-             };
-             if(item != 'time' && item != 'status'){
-                 octopus.getItems()[item].quantity += getData[item];
-             }
-         }
+         octopus.updateMakingItem(getData);
 
          let item = document.getElementsByClassName('display-item')[0];
          item.innerHTML = "";
@@ -125,7 +164,7 @@ let viewPending = {
 
     init:function(order){
         let getData = JSON.parse(octopus.getLocalStorage()[order]);
-        let pedingList = document.getElementsByClassName('pending-list')[0];
+        let pedingList = document.getElementById('order-list-pending');
         let createList = "";
         for(let item in getData){
             if(item == 'time' || item == 'status'){
@@ -134,7 +173,7 @@ let viewPending = {
             createList += `<span> ${item}:- ${getData[item]}</span>`;
         }
         pedingList.innerHTML +=
-                    `<div class="pending-order" id=${order}>
+                    `<div class="order-info" id=${order}>
                             <div class="person-img">
                                 <img src="Images/person.jpeg" alt="person" style="width: 80px;height: 80px">
                             </div>
@@ -150,18 +189,54 @@ let viewPending = {
                             </div>
 
                             <div class="status-btn">
-                                <span>Pending</span>
+                                Pending
                             </div>
 
                             <div class="delete-btn">
                                 X
                             </div>
-                    </div>`
-        pedingList.onclick = octopus.deleteItem;
+                    </div>`;
+        pedingList.onclick = octopus.updateOrder;
     },
 
     delete:function(item){
         item.parentNode.removeChild(item);
+    }
+}
+
+
+let viewCompleted = {
+
+    init:function(order){
+        let getData = JSON.parse(octopus.getLocalStorage()[order]);
+        let completedList = document.getElementById('order-list-completed');
+        let createList = "";
+        for(let item in getData){
+            if(item == 'time' || item == 'status'){
+                continue;
+            }
+            createList += `<span> ${item}:- ${getData[item]}</span>`;
+        }
+        completedList.innerHTML +=
+                `<div class="order-info" id="${order}">
+                        <div class="person-img">
+                            <img src="Images/person.jpeg" alt="person" style="width: 80px;height: 80px">
+                        </div>
+
+                        <div class="person-detail">
+                            <span>Ketan Paladiya</span>
+                            <span>Table No:- 1</span>
+                            <span>Time :- ${getData['time']}</span>
+                        </div>
+
+                        <div class="order-details">
+                            ${createList}
+                        </div>
+
+                        <div class="status-btn approve">
+                            <span>Approved</span>
+                        </div>
+                    </div>`;
     }
 }
 
