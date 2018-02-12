@@ -64,11 +64,12 @@ class PendingOrder extends Component{
     }
 
     displayOrderList(orderList){
-        let pendingOrderList = [];
-        orderList.forEach( (item) => {
-            pendingOrderList.push(Controller.getLocalItemByKey(item));
-        });
-        return pendingOrderList;
+        // let pendingOrderList = [];
+        // // orderList.forEach( (item) => {
+        // //     pendingOrderList.push(Controller.getLocalItemByKey(item));
+        // // });\
+        return orderList.map(Controller.getLocalItemByKey,Controller);
+
     }
 
     handlerRemoveOrder(e){
