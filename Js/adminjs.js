@@ -1,4 +1,4 @@
-
+import React from 'react'
 
 /* ====== model ====== */
 
@@ -111,13 +111,13 @@ let octopus = {
         }
     },
 
-    deleteOrder(){
+    deleteOrder:function(){
         let item = event.target.closest('.order-info');
         model.myLocalStorage.removeItem(item.id);
         viewPending.delete(item);
     },
 
-    statusUpdate(){
+    statusUpdate:function(){
         let item = event.target.closest('.order-info');
         let getOrderId = JSON.parse(model.myLocalStorage[item.id]);
         getOrderId.status = 'approve';
@@ -125,7 +125,18 @@ let octopus = {
         view.init(getOrderId);
         viewPending.delete(item);
         viewCompleted.init(item.id);
-    }
+    },
+
+    createOrderList:function(order){
+        let createList = "";
+        for(let item in order){
+            if(item == 'time' || item == 'status'){
+                continue;
+            }
+            createList += `<span> ${item}:- ${order[item]}</span>`;
+        }
+        return createList;
+    },
 
 };
 
@@ -138,7 +149,6 @@ let view = {
      init:function(getData){
 
          octopus.updateMakingItem(getData);
-
          let item = document.getElementsByClassName('display-item')[0];
          item.innerHTML = "";
          let containerData = "";
@@ -165,13 +175,7 @@ let viewPending = {
     init:function(order){
         let getData = JSON.parse(octopus.getLocalStorage()[order]);
         let pedingList = document.getElementById('order-list-pending');
-        let createList = "";
-        for(let item in getData){
-            if(item == 'time' || item == 'status'){
-                continue;
-            }
-            createList += `<span> ${item}:- ${getData[item]}</span>`;
-        }
+        const  createList = octopus.createOrderList(getData);
         pedingList.innerHTML +=
                     `<div class="order-info" id=${order}>
                             <div class="person-img">
@@ -210,13 +214,7 @@ let viewCompleted = {
     init:function(order){
         let getData = JSON.parse(octopus.getLocalStorage()[order]);
         let completedList = document.getElementById('order-list-completed');
-        let createList = "";
-        for(let item in getData){
-            if(item == 'time' || item == 'status'){
-                continue;
-            }
-            createList += `<span> ${item}:- ${getData[item]}</span>`;
-        }
+        const createList = octopus.createOrderList(getData);
         completedList.innerHTML +=
                 `<div class="order-info" id="${order}">
                         <div class="person-img">
@@ -240,5 +238,6 @@ let viewCompleted = {
     }
 }
 
+ReactDOM.render(<h1> hello world </h1>,document.getElementById(''));
 
 octopus.init();

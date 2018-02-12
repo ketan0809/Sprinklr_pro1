@@ -18,13 +18,16 @@ body{
     text-align: center;
     z-index: 10;
 }
-
+#user-image{
+    width: 40px;
+    height: 40px;
+}
 .header-list{
     align-items: center;
     color: #ffffff;
     display: flex;
     font-size: 20px;
-
+    text-decoration: none;
 }
 
 .header-user{

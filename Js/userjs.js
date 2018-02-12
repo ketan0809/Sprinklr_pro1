@@ -205,6 +205,13 @@ let octopus = {
         }
     },
 
+    itemIncrement(){
+
+    },
+    itemDecrement(){
+
+    },
+
     removeOrder : function (event) {
         if(event.target.className!='cancel-btn')
             return ;
