@@ -9,13 +9,13 @@ class Items extends Component{
 
     render(){
         return (
-            <div class="item1" id={this.props.itemdetails.itemId} onClick={this.props.onItemClick}>
-                <div class="item1-img">
+            <div className="item1">
+                <div className="item1-img">
                     <img src={this.props.itemdetails.itemImgSrc} className="item1-img"/>
                 </div>
-                <div class="item1-detail">
-                    <div class="item1-name">{this.props.itemdetails.itemName}</div>
-                    <div class="item1-cart">
+                <div className="item1-detail">
+                    <div className="item1-name">{this.props.itemdetails.itemName}</div>
+                    <div className="item1-cart" id={this.props.itemdetails.itemId} onClick={this.props.onItemClick}>
                         Add To Cart
                     </div>
                 </div>
@@ -34,7 +34,7 @@ class MenuItem extends Component{
     render(){
         return (
             <div className="items">
-                {this.props.items.map( item => <Items itemdetails={item} onItemClick={this.props.onItemClick}/> )}
+                {this.props.items.map( item => <Items key={item.itemId} itemdetails={item} onItemClick={this.props.onItemClick}/> )}
             </div>
         )
     }
@@ -50,7 +50,7 @@ class MenuTitle extends Component{
 
     render() {
         return (
-            <div className="menu-title" onClick={this.props.onclick}>
+            <div className="menu-title" onClick={this.props.onMenuCategory}>
                 <div className="menu-allitem"> All Item </div>
                 <div className="menu-beverage"> Beverage </div>
                 <div className="menu-snacks"> Snacks </div>
@@ -69,7 +69,7 @@ class Menu extends Component{
 
         return (
             <div id='menu'>
-                    <MenuTitle onclick = {this.props.onMenuTitle}/>
+                    <MenuTitle onMenuCategory = {this.props.onMenuTitle}/>
                     <MenuItem items={this.props.items} onItemClick={this.props.onAddToCart}/>
             </div>
         )
