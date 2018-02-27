@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Menu from './Menu';
 import ContainerRight from './ContainerRight';
 
+// <------- Model ------->
 
 let model = {
 
@@ -72,18 +73,18 @@ let model = {
             itemCategory: 'Beverage'
         }
     },
-    addItemToLocalStorage:function(itemId){
+    addItemToLocalStorage(itemId){
         let myLocalStorage = model.myLocalStorage;
-        let itemList = model.items;
+        const itemList = model.items;
         myLocalStorage.setItem(itemId,JSON.stringify(itemList[itemId]));
     },
-    pluseItemQuantity:function(itemId){
+    pluseItemQuantity(itemId){
         let myLocalStorage = model.myLocalStorage;
         let getData = JSON.parse(myLocalStorage.getItem(itemId));
         getData.itemQuantity += 1;
         myLocalStorage.setItem(itemId,JSON.stringify(getData));
     },
-    minusItemQuantity:function(itemId){
+    minusItemQuantity(itemId){
         let myLocalStorage = model.myLocalStorage;
         let getData = JSON.parse(myLocalStorage.getItem(itemId));
         if(getData.itemQuantity <= 1){
@@ -92,23 +93,23 @@ let model = {
         getData.itemQuantity -= 1;
         myLocalStorage.setItem(itemId,JSON.stringify(getData));
     },
-    removeItemToLocalStorage:function(itemId){
+    removeItemToLocalStorage(itemId){
         let myLocalStorage = model.myLocalStorage;
         myLocalStorage.removeItem(itemId);
     },
-    removeOrderFromLocalStorage:function(orderId){
+    removeOrderFromLocalStorage(orderId){
         let myLocalStorage = model.myLocalStorage;
         myLocalStorage.removeItem(orderId);
     }
 };
+
 // <------ Controller ----->
 
 let Controller = {
-    init:function(){
-
-    },
-    getItemList:function(){
-        return model.items;
+    getItemList(){
+        return new Promise((resolve, reject) => {
+            setInterval(()=>resolve(model.items),5000);
+        });
     },
     addItemToCart(itemId){
         let myLocalStoragr = model.myLocalStorage;
@@ -117,10 +118,10 @@ let Controller = {
         }
         model.addItemToLocalStorage(itemId);
     },
-    getLocalStorageData:function(){
+    getLocalStorageData(){
         return model.myLocalStorage;
     },
-    getLocalCartItem:function(){
+    getLocalCartItem(){
         let myLocalStorage = model.myLocalStorage;
         let cartItem = [];
         for(let item in myLocalStorage){
@@ -210,32 +211,33 @@ let Controller = {
 class Container extends Component{
     constructor(props){
         super(props);
-        this.itemList = Controller.getItemList();
         this.state = {
+            itemList : 'Loading',
             selectedCategory: 'All Item',
             cartItem : Controller.getLocalCartItem(),
             pendingOrderList : Controller.getLocalPendingOrder()
         }
-        this.handlerFilterItem = this.handlerFilterItem.bind(this);
-        this.handlerAddToCart = this.handlerAddToCart.bind(this);
-        this.plusItemQuantity = this.plusItemQuantity.bind(this);
-        this.minusItemQuantity = this.minusItemQuantity.bind(this);
-        this.removeItemFromCart = this.removeItemFromCart.bind(this);
-        this.handlerPlaceOrder = this.handlerPlaceOrder.bind(this);
-        this.handlerRemoveOrder = this.handlerRemoveOrder.bind(this);
      }
 
-    handlerFilterItem(e){
-        let onSelectedCategory = e.target.innerHTML.trim();
-        if(onSelectedCategory === 'All Item' || onSelectedCategory === 'Beverage' || onSelectedCategory === 'Snacks'){
+    handlerFilterItem = (onSelectedCategory) => {
             this.setState({
-                selectedCategory:onSelectedCategory,
+                selectedCategory:onSelectedCategory.trim(),
+                itemList : 'Loading'
             });
-        }
-    }
+    };
+
+    fetchData(){
+        Controller.getItemList().then(result => this.setState({
+            itemList : result
+        }));
+    };
 
     FilterItem(selectedCategory){
-        let itemList = this.itemList;
+        this.fetchData();
+        let itemList = this.state.itemList;
+        if(itemList === 'Loading'){
+            return itemList;
+        }
         let items = [];
         let flag = false;
         if(selectedCategory === 'All Item'){
@@ -247,65 +249,61 @@ class Container extends Component{
             }
         }
         return items;
-    }
+    };
 
-    handlerAddToCart(e){
-       const itemId = e.target.id;
+    handlerAddToCart = (itemId) => {
        const cartItem = this.addItemToCart(itemId);
        this.setState({
            cartItem: cartItem
-       })
-    }
+       });
+    };
 
     addItemToCart(itemId){
         Controller.addItemToCart(itemId);
         const  cartItemList= Controller.getLocalCartItem();
         return cartItemList;
-    }
+    };
 
-    plusItemQuantity(itemId){
+    plusItemQuantity = (itemId) => {
         Controller.increaseItemQuantity(itemId);
         const updatedCartItem = Controller.getLocalCartItem();
         this.setState({
             cartItem : updatedCartItem
         });
-    }
+    };
 
-    minusItemQuantity(itemId){
+    minusItemQuantity = (itemId) => {
         Controller.decreaseItemQuantity(itemId);
         const updatedCartItem = Controller.getLocalCartItem();
         this.setState({
             cartItem : updatedCartItem
         });
-    }
+    };
 
-    removeItemFromCart(itemId){
+    removeItemFromCart = (itemId) => {
         Controller.removeItemFromCart(itemId);
         const updatedCartItem = Controller.getLocalCartItem();
         this.setState({
             cartItem : updatedCartItem
         });
-    }
+    };
 
-    handlerPlaceOrder(e){
-        const clickButtonClssName = e.target.className;
-        if(clickButtonClssName.trim() === 'btn-placeorder'){
-            Controller.placeOrder();
-            const updatedPendingOrderList = Controller.getLocalPendingOrder();
-            this.setState({
-                cartItem : [],
-                pendingOrderList : updatedPendingOrderList
-            });
-        }
-    }
+    handlerPlaceOrder = () => {
+        Controller.placeOrder();
+        const updatedPendingOrderList = Controller.getLocalPendingOrder();
+        this.setState({
+            cartItem : [],
+            pendingOrderList : updatedPendingOrderList
+        });
+    };
 
-    handlerRemoveOrder(orderId){
+    handlerRemoveOrder = (orderId) => {
         Controller.removeOrderFromPendingList(orderId);
         const updatedPendingOrderList  = Controller.getLocalPendingOrder();
         this.setState({
            pendingOrderList:updatedPendingOrderList
         });
-    }
+    };
 
     render(){
         const displayItems = this.FilterItem(this.state.selectedCategory);
@@ -313,7 +311,9 @@ class Container extends Component{
         const pendingOrderList = this.state.pendingOrderList;
         return (
             <div className="container">
+
                 <Menu items={displayItems} onMenuTitle={this.handlerFilterItem} onAddToCart={this.handlerAddToCart}/>
+
                 <ContainerRight cartItems = {cartItem} pendingOrderList={pendingOrderList}
                                 plusItemQuantity={this.plusItemQuantity} minusItemQuantity={this.minusItemQuantity}
                                 removeItemFromCart={this.removeItemFromCart} onPlaceOrder={this.handlerPlaceOrder}

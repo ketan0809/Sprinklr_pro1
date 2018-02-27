@@ -9,9 +9,6 @@ import Container from './Components/Container'
 
 
 class App extends Component{
-  constructor(props){
-      super(props);
-  }
 
   render() {
         return (
@@ -19,9 +16,9 @@ class App extends Component{
                 <Header />
                 <div className="header-img">
                     <img src="Images/2.jpg" className="img"/>
-                        <div className="text">
-                            <p className="img-text">The Sprinklr <br /> Pantry </p>
-                        </div>
+                    <div className="text">
+                        <p className="img-text">The Sprinklr <br /> Pantry </p>
+                    </div>
                 </div>
                 <Container/>
             </div>

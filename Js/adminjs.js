@@ -1,4 +1,4 @@
-import React from 'react'
+
 
 /* ====== model ====== */
 
@@ -51,10 +51,11 @@ let octopus = {
 
     init:function(){
        for(let order in model.myLocalStorage) {
+           console.log('order->',order);
            if (!model.myLocalStorage.hasOwnProperty(order)) {
                continue;
-           };
-           if(isNaN(Number(order))==true && order!='orderNumber'){
+           }
+           if(isNaN(Number(order)) === true && order.trim() !=='orderNumber'){
                let getData = JSON.parse(model.myLocalStorage[order]);
                view.init(getData);
                if(getData.status == 'pending') {
@@ -82,7 +83,7 @@ let octopus = {
             for (let item in getData) {
                 if (!getData.hasOwnProperty(item)) {
                     continue;
-                };
+                }
                 if (item != 'time' && item != 'status') {
                     model.items[item].quantity += getData[item];
                 }
@@ -91,7 +92,7 @@ let octopus = {
             for (let item in getData) {
                 if (!getData.hasOwnProperty(item)) {
                     continue;
-                };
+                }
                 if (item != 'time' && item != 'status') {
                     if(model.items[item].quantity  >= getData[item]){
                         model.items[item].quantity  -= getData[item];
@@ -206,7 +207,7 @@ let viewPending = {
     delete:function(item){
         item.parentNode.removeChild(item);
     }
-}
+};
 
 
 let viewCompleted = {
@@ -236,8 +237,6 @@ let viewCompleted = {
                         </div>
                     </div>`;
     }
-}
-
-ReactDOM.render(<h1> hello world </h1>,document.getElementById(''));
+};
 
 octopus.init();

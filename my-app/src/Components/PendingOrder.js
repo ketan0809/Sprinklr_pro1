@@ -6,7 +6,6 @@ import React, { Component } from 'react';
 class Order extends Component{
     constructor(props){
         super(props);
-        this.onCancelOrder = this.onCancelOrder.bind(this);
     }
 
     displayOrderList(orderInfo){
@@ -24,12 +23,12 @@ class Order extends Component{
         return <span>Table No :- 1    Time :- {orderInfo['time']}</span>
     }
 
-    onCancelOrder(e){
+    onCancelOrder = (e) => {
         const clickButtonClassName = e.target.className;
         if(clickButtonClassName === 'cancel-btn'){
             this.props.removeOrderFromPendingList(this.props.orderDetails.orderId);
         }
-    }
+    };
 
     render() {
         let displayOrder = this.displayOrderList(this.props.orderDetails);
@@ -65,10 +64,10 @@ class PendingOrder extends Component{
                     <div className="ordername-pending" id="pendingorder">Pending order</div>
                 </div>
                 <div className="ordername-pending-order">
-                    {orderList.map((item) =>  <Order key={item['orderId']} orderDetails={item}
+                    {orderList.map((item) =>  <Order key={item['orderId']}
+                                                     orderDetails={item}
                                                      removeOrderFromPendingList={this.props.removeOrderFromPendingList}/>)}
                 </div>
-
             </div>
         )
     }

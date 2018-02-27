@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 
 
-class ImgHeader extends Component{
-
-}
 
 class Header extends Component{
     constructor(props){

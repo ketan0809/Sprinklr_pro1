@@ -5,14 +5,12 @@ import PendingOrder from './PendingOrder';
 class CartItem extends Component{
     constructor(props){
         super(props);
-        this.handlerUpdateCartItem = this.handlerUpdateCartItem.bind(this);
     }
 
-    handlerUpdateCartItem(e){
+    handlerUpdateCartItem = (e) => {
         const clickButtonClass = e.target.className;
         const itemId = this.props.items.itemId;
         if(clickButtonClass === 'item-btn-plus'){
-            console.log('itemid',itemId);
             this.props.plusItemQuantity(itemId);
         }else if(clickButtonClass === 'item-btn-minus'){
             this.props.minusItemQuantity(itemId);
@@ -20,7 +18,7 @@ class CartItem extends Component{
             this.props.removeItemFromCart(itemId);
         }
 
-    }
+    };
 
     render(){
         const itemname = this.props.items.itemName;
@@ -54,6 +52,7 @@ class AddToCart extends Component{
     constructor(props){
         super(props);
     }
+
     render(){
         const cartItem = this.props.items;
         return (
@@ -87,11 +86,15 @@ class ContainerRight extends Component{
         const pendingOrderList = this.props.pendingOrderList;
         return (
             <div className='container-display'>
+
                 <AddToCart items={cartItems} onPlaceOrder={this.props.handlerPlaceOrder}
                            plusItemQuantity={this.props.plusItemQuantity}
                            minusItemQuantity={this.props.minusItemQuantity}
-                           removeItemFromCart={this.props.removeItemFromCart} onPlaceOrder={this.props.onPlaceOrder}/>
-                <PendingOrder pendingOrderList={pendingOrderList} removeOrderFromPendingList={this.props.removeOrderFromPendingList}/>
+                           removeItemFromCart={this.props.removeItemFromCart}
+                           onPlaceOrder={this.props.onPlaceOrder}/>
+
+                <PendingOrder pendingOrderList={pendingOrderList}
+                              removeOrderFromPendingList={this.props.removeOrderFromPendingList}/>
             </div>
         )
     }
